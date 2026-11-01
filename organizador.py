@@ -1,5 +1,20 @@
 from rich.console import Console
 from rich.panel import Panel
+import os
+
+
+def obtener_extension(nombre_archivo):
+    """Obtiene la extensión de un archivo.
+
+    Recibe el nombre del archivo como cadena.
+    Devuelve la extensión en minúsculas y sin punto,
+    o "sin_extension" si no tiene extensión.
+    """
+    nombre, extension = os.path.splitext(nombre_archivo)
+
+    if extension == "":
+        return "sin_extension"
+    return extension[1:].lower()
 
 
 def mostrar_cabecera(consola):
