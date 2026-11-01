@@ -1,5 +1,6 @@
 from rich.console import Console
 from rich.panel import Panel
+from rich.prompt import Prompt
 import os
 
 
@@ -61,6 +62,46 @@ def main():
     # Crear una única consola y mostrar la presentación.
     consola = Console()
     mostrar_cabecera(consola)
+
+    # Pedir las rutas de trabajo
+    ruta_origen = Prompt.ask(
+        "[cyan]Carpeta de origen[/cyan]",
+        console=consola,
+    )
+    ruta_destino = Prompt.ask(
+        "[cyan]Carpeta de destino[/cyan]",
+        console=consola,
+    )
+
+    # Comprobar que el origen existe y es una carpeta
+    if not os.path.isdir(ruta_origen):
+        consola.print(
+            Panel(
+                "La ruta de origen no existe o no es una carpeta",
+                border_style="red",
+            )
+        )
+        return
+
+    # Si el destino existe, debe ser una carpeta
+    if os.path.exists(ruta_destino) and not os.path.isdir(ruta_destino):
+        consola.print(
+            Panel(
+                "la ruta de destino existe, pero no es una carpeta",
+                border_style="red",
+            )
+        )
+        return
+
+    # Evita rutas iguales o carpetas contenidas una dentro de otra
+    if una_dentro_de_otra(ruta_origen, ruta_destino):
+        consola.print(
+            Panel(
+                "Origen y destino no pueder ser iguales ni estar uno dentro de otro",
+                border_style="red",
+            )
+        )
+        return
 
 
 if __name__ == "__main__":
