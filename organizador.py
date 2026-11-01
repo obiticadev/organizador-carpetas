@@ -17,6 +17,29 @@ def obtener_extension(nombre_archivo):
     return extension[1:].lower()
 
 
+def tamano_legible(tamano_bytes):
+    unidades = ["bytes", "KB", "MB", "GB"]
+    tamano = tamano_bytes
+    indice = 0
+
+    while tamano >= 1024 and indice < len(unidades) - 1:
+        tamano = tamano / 1024
+        indice = indice + 1
+
+    return f"{tamano:.2f} {unidades[indice]}"
+
+
+def una_dentro_de_otra(ruta_a, ruta_b):
+    """Recibe dos rutas y devuelve si son iguales o una contiene a la otra."""
+    absoluta_a = os.path.join(os.path.abspath(ruta_a), "")
+    absoluta_b = os.path.join(os.path.abspath(ruta_b), "")
+
+    a_dentro_de_b = absoluta_a.startswith(absoluta_b)
+    b_dentro_de_a = absoluta_b.startswith(absoluta_a)
+
+    return a_dentro_de_b or b_dentro_de_a
+
+
 def mostrar_cabecera(consola):
     """Muestra la cabecera.
 
