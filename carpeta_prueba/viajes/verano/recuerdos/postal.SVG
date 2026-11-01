@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300">
+  <rect width="480" height="300" fill="#bae6fd"/>
+  <circle cx="380" cy="65" r="32" fill="#facc15"/>
+  <rect y="155" width="480" height="90" fill="#38bdf8"/>
+  <rect y="245" width="480" height="55" fill="#fde68a"/>
+  <text x="25" y="55" font-family="sans-serif" font-size="26">Un verano junto al mar</text>
+</svg>
