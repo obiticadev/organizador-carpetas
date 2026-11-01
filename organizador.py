@@ -2,6 +2,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 import os
+import shutil
 
 
 def obtener_extension(nombre_archivo):
@@ -39,6 +40,50 @@ def una_dentro_de_otra(ruta_a, ruta_b):
     b_dentro_de_a = absoluta_b.startswith(absoluta_a)
 
     return a_dentro_de_b or b_dentro_de_a
+
+
+def nombre_disponible(ruta_destino, nombre_archivo):
+    """Busca un nombre libre en la carpeta de destino.
+
+    Recibe la ruta de la carpeta y el nombre original del archivo.
+    Devuelve el nombre original si está libre o uno con sufijo numérico.
+    """
+    nombre, extension = os.path.splitext(nombre_archivo)
+    candidato = nombre_archivo
+    contador = 1
+
+    while os.path.exists(os.path.join(ruta_destino, candidato)):
+        candidato = f"{nombre}_{contador}{extension}"
+        contador = contador + 1
+
+    return candidato
+
+
+def clasificar_archivo(ruta_origen, nombre_archivo, ruta_destino, historial):
+    """Mueve un archivo a la subcarpeta correspondiente a su extensión.
+
+    Recibe la ruta completa del archivo, su nombre, la carpeta de destino
+    y una lista compartida donde registrar los movimientos.
+    Devuelve el tamaño en bytes y añade el movimiento al historial.
+    """
+    extension = obtener_extension(nombre_archivo)
+    carpeta_extension = os.path.join(ruta_destino, extension)
+
+    # Crear la subcarpeta de clasificación.
+    os.makedirs(carpeta_extension, exist_ok=True)
+
+    # Elegir un nombre que no sobrescriba archivos existentes.
+    nombre_final = nombre_disponible(carpeta_extension, nombre_archivo)
+    destino_final = os.path.join(carpeta_extension, nombre_final)
+
+    # Obtener el tamaño antes de mover el archivo.
+    tamano = os.path.getsize(ruta_origen)
+    shutil.move(ruta_origen, destino_final)
+
+    # Modificar la lista original recibida como parámetro.
+    historial.append(f"{ruta_origen} → {destino_final}")
+
+    return tamano
 
 
 def mostrar_cabecera(consola):
