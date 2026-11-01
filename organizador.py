@@ -86,6 +86,41 @@ def clasificar_archivo(ruta_origen, nombre_archivo, ruta_destino, historial):
     return tamano
 
 
+def clasificar_carpeta_recursivo(ruta_origen, ruta_destino, historial):
+    """Clasifica los archivos de una carpeta y sus subcarpetas.
+
+    Recibe las carpetas de origen y destino y la lista compartida
+    de movimientos.
+    Devuelve el total de bytes movidos.
+    """
+    total_bytes = 0
+
+    # Caso base: si la carpeta está vacía, el bucle no se ejecuta
+    # y se devuelve 0. Los archivos se procesan sin más recursión.
+    for nombre in os.listdir(ruta_origen):
+        ruta_elemento = os.path.join(ruta_origen, nombre)
+
+        if os.path.isdir(ruta_elemento):
+            # Caso recursivo: resolver el mismo problema en una subcarpeta.
+            bytes_movidos = clasificar_carpeta_recursivo(
+                ruta_elemento,
+                ruta_destino,
+                historial,
+            )
+            total_bytes = total_bytes + bytes_movidos
+
+        elif os.path.isfile(ruta_elemento):
+            bytes_movidos = clasificar_archivo(
+                ruta_elemento,
+                nombre,
+                ruta_destino,
+                historial,
+            )
+            total_bytes = total_bytes + bytes_movidos
+
+    return total_bytes
+
+
 def mostrar_cabecera(consola):
     """Muestra la cabecera.
 
