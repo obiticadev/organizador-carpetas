@@ -1,9 +1,16 @@
+"""Organiza recursivamente archivos en subcarpetas según su extensión.
+
+Conserva los archivos con nombres repetidos mediante sufijos numéricos
+y muestra el resumen y el historial de movimientos con Rich.
+"""
+
+import os
+import shutil
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.table import Table
-import os
-import shutil
 
 
 def obtener_extension(nombre_archivo):
@@ -21,6 +28,11 @@ def obtener_extension(nombre_archivo):
 
 
 def tamano_legible(tamano_bytes):
+    """Convierte un tamaño en bytes a una unidad legible.
+
+    Recibe un tamaño no negativo en bytes.
+    Devuelve una cadena con dos decimales en bytes, KB, MB o GB.
+    """
     unidades = ["bytes", "KB", "MB", "GB"]
     tamano = tamano_bytes
     indice = 0
@@ -33,7 +45,11 @@ def tamano_legible(tamano_bytes):
 
 
 def una_dentro_de_otra(ruta_a, ruta_b):
-    """Recibe dos rutas y devuelve si son iguales o una contiene a la otra."""
+    """Comprueba si dos rutas son iguales o una está dentro de la otra.
+
+    Recibe dos rutas como cadenas.
+    Devuelve True si son iguales o están anidadas, y False en otro caso.
+    """
     absoluta_a = os.path.join(os.path.abspath(ruta_a), "")
     absoluta_b = os.path.join(os.path.abspath(ruta_b), "")
 
@@ -152,7 +168,7 @@ def mostrar_cabecera(consola):
     No devuelve ningún resultado.
     """
     panel = Panel(
-        "Organización automático de carpetas",
+        "Organizador automático de carpetas",
         border_style="cyan",
     )
     consola.print(panel)
@@ -228,7 +244,7 @@ def main():
     if os.path.exists(ruta_destino) and not os.path.isdir(ruta_destino):
         consola.print(
             Panel(
-                "la ruta de destino existe, pero no es una carpeta",
+                "La ruta de destino existe, pero no es una carpeta",
                 border_style="red",
             )
         )
@@ -238,7 +254,7 @@ def main():
     if una_dentro_de_otra(ruta_origen, ruta_destino):
         consola.print(
             Panel(
-                "Origen y destino no pueder ser iguales ni estar uno dentro de otro",
+                "Origen y destino no pueden ser iguales ni estar uno dentro del otro",
                 border_style="red",
             )
         )
