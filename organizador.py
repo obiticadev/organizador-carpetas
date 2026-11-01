@@ -121,6 +121,29 @@ def clasificar_carpeta_recursivo(ruta_origen, ruta_destino, historial):
     return total_bytes
 
 
+def contar_archivos_recursivo(ruta):
+    """Cuenta los archivos de una carpeta y sus subcarpetas.
+
+    Recibe la ruta de una carpeta existente.
+    Devuelve el número total de archivos encontrados.
+    """
+    total_archivos = 0
+
+    for nombre in os.listdir(ruta):
+        ruta_elemento = os.path.join(ruta, nombre)
+
+        if os.path.isdir(ruta_elemento):
+            # Caso recursivo: sumar los archivos de la subcarpeta.
+            total_archivos = total_archivos + contar_archivos_recursivo(
+                ruta_elemento
+            )
+
+        elif os.path.isfile(ruta_elemento):
+            total_archivos = total_archivos + 1
+
+    return total_archivos
+
+
 def mostrar_cabecera(consola):
     """Muestra la cabecera.
 
