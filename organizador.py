@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
+from rich.table import Table
 import os
 import shutil
 
@@ -157,6 +158,43 @@ def mostrar_cabecera(consola):
     consola.print(panel)
 
 
+def mostrar_informe(consola, movidos, tamano_total, en_origen, en_destino, historial):
+    """Muestra el resumen y los movimientos realizados.
+
+    Recibe la consola, el número de archivos movidos, los bytes movidos,
+    los recuentos de origen y destino y la lista de movimientos.
+    No devuelve ningún resultado.
+    """
+    # Construir la tabla de resumen.
+    resumen = Table(title="Informe final")
+    resumen.add_column("Concepto")
+    resumen.add_column("Valor", justify="right")
+
+    color_origen = "green" if en_origen == 0 else "red"
+
+    resumen.add_row("Archivos movidos", str(movidos))
+    resumen.add_row("Tamaño total movido", tamano_legible(tamano_total))
+    resumen.add_row(
+        "Archivos que quedan en el origen",
+        f"[{color_origen}]{en_origen}[/{color_origen}]",
+    )
+    resumen.add_row("Archivos en el destino", str(en_destino))
+
+    consola.print(resumen)
+
+    # Construir la tabla del historial.
+    movimientos = Table(title="Movimientos realizados")
+    movimientos.add_column("N.º", justify="right")
+    movimientos.add_column("Origen → destino")
+
+    numero = 1
+    for movimiento in historial:
+        movimientos.add_row(str(numero), movimiento)
+        numero = numero + 1
+
+    consola.print(movimientos)
+
+
 def main():
     """Inicia el programa.
 
@@ -205,6 +243,33 @@ def main():
             )
         )
         return
+
+    historial = []
+
+    # Clasificar los archivos y obtener los bytes movidos
+    tamano_total = clasificar_carpeta_recursivo(
+        ruta_origen,
+        ruta_destino,
+        historial,
+    )
+
+    # Contar los archivos después de la clasificación
+    en_origen = contar_archivos_recursivo(ruta_origen)
+
+    if os.path.isdir(ruta_destino):
+        en_destino = contar_archivos_recursivo(ruta_destino)
+    else:
+        en_destino = 0
+
+    # Mostrar los resultados.
+    mostrar_informe(
+        consola,
+        len(historial),
+        tamano_total,
+        en_origen,
+        en_destino,
+        historial,
+    )
 
 
 if __name__ == "__main__":
