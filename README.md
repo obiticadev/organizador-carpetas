@@ -4,6 +4,12 @@ Programa en Python que organiza los archivos de una carpeta y sus subcarpetas se
 
 > **Importante:** los archivos se mueven, no se copian. Utiliza los ejemplos incluidos o una copia de tus datos. No uses la raíz del proyecto ni tu carpeta personal como origen.
 
+## Vídeo de demostración
+
+[Descargar el vídeo de demostración (MP4)](https://github.com/obiticadev/organizador-carpetas/releases/download/v1.0/organizador-carpetas_entrega.mp4)
+
+El vídeo recoge la preparación del entorno, los casos de origen vacío, origen inexistente, destino dentro del origen y destino que es un archivo, las pruebas de `tamano_legible()` y la clasificación válida con el estado inicial y final de las carpetas. También está disponible en la [release v1.0](https://github.com/obiticadev/organizador-carpetas/releases/tag/v1.0).
+
 ## Funcionalidades
 
 - Recorrido recursivo de subcarpetas mediante funciones propias, sin `os.walk()`.
@@ -59,6 +65,16 @@ Carpeta de origen: carpeta_prueba
 Carpeta de destino: organizado
 ```
 
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="docs/img/demo-ejecucion.gif" alt="Clasificación de carpeta_prueba en organizado con el informe final" width="760">
+      <br>
+      <sub><b>Clasificación válida</b> · <code>carpeta_prueba</code> → <code>organizado</code>: 12 archivos movidos, informe final e historial de movimientos.</sub>
+    </td>
+  </tr>
+</table>
+
 Las rutas relativas parten del directorio actual de la terminal. También se admiten rutas absolutas. Si una ruta contiene espacios, escríbela normalmente en la pregunta, sin añadir comillas alrededor.
 
 El origen debe existir y ser una carpeta. El destino puede no existir, pero si existe debe ser una carpeta. No se permite que sean iguales ni que una carpeta esté dentro de la otra.
@@ -71,6 +87,7 @@ organizador-carpetas/
 ├── requirements.txt     # Dependencias del entorno
 ├── README.md            # Documentación del proyecto
 ├── .gitignore           # Exclusiones del control de versiones
+├── docs/img/            # GIFs de demostración del README
 ├── carpeta_prueba/      # Archivos y subcarpetas para las pruebas
 ├── organizado/          # Destino de ejemplo con archivos preexistentes
 └── carpeta_vacia/       # Prueba de origen vacío; se crea localmente
@@ -169,6 +186,16 @@ Ejecuta `python organizador.py` para cada caso:
 
 Realiza primero los casos de validación y después la clasificación válida. Comprueba el estado de las carpetas antes y después de cada ejecución.
 
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="docs/img/validaciones.gif" alt="Avisos de origen inexistente, destino dentro del origen y destino que es un archivo" width="760">
+      <br>
+      <sub><b>Validación de rutas</b> · origen inexistente, destino dentro del origen y destino que es un archivo: aviso en rojo y fin sin traceback.</sub>
+    </td>
+  </tr>
+</table>
+
 ### Pruebas de conversión de tamaños
 
 Desde una sesión de `python`:
@@ -184,9 +211,28 @@ tamano_legible(1073741824)  # '1.00 GB'
 tamano_legible(1536)        # '1.50 KB'
 ```
 
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="docs/img/tamano-legible.gif" alt="Pruebas de tamano_legible con valores en bytes, KB, MB y GB" width="760">
+      <br>
+      <sub><b>Conversión de tamaños</b> · <code>tamano_legible()</code> con valores límite que cubren bytes, KB, MB y GB.</sub>
+    </td>
+  </tr>
+</table>
+
 ### Repetir las pruebas
 
 La clasificación mueve los archivos y cambia el estado de las carpetas. Guarda una copia de `carpeta_prueba` y `organizado` antes de empezar. Para repetir con los mismos resultados, recupera ambas estructuras en su estado inicial. Reponer únicamente el origen sin restaurar el destino aumenta los sufijos y el recuento final.
+
+Si trabajas con el repositorio clonado, Git restaura ambas estructuras al estado inicial:
+
+```bash
+git checkout -- carpeta_prueba
+git clean -fd organizado
+```
+
+`git clean -fd organizado` elimina solo los archivos no versionados de `organizado/`, es decir, los generados por las pruebas.
 
 ## Limitaciones y precauciones
 
